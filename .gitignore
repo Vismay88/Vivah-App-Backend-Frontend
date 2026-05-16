@@ -1,0 +1,51 @@
+# ── Dependencies ──────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ── Environment variables ─────────────────────────────
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+.env.*.local
+
+# ── Vite build output ─────────────────────────────────
+dist/
+dist-ssr/
+
+# ── Vite cache ────────────────────────────────────────
+.vite/
+vite.config.js.timestamp-*
+
+# ── OS files ──────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini
+
+# ── Editor / IDE ──────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Testing ───────────────────────────────────────────
+coverage/
+playwright-report/
+test-results/
+
+# ── Misc ──────────────────────────────────────────────
+*.local
+.cache/
+tmp/
+temp/
+
+.package-lock.json
