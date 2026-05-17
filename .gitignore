@@ -1,0 +1,55 @@
+# ── Dependencies ──────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ── Environment variables (NEVER commit secrets) ──────
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+.env.*.local
+
+# ── Uploads (user-generated files) ────────────────────
+uploads/
+
+# ── Logs ──────────────────────────────────────────────
+logs/
+*.log
+
+# ── OS files ──────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini
+
+# ── Editor / IDE ──────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Build output ──────────────────────────────────────
+dist/
+build/
+
+# ── Testing ───────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ── Misc ──────────────────────────────────────────────
+*.pem
+*.key
+*.cert
+.cache/
+tmp/
+temp/
+
+package-lock.json
