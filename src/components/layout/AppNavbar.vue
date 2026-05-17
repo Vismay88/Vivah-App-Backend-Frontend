@@ -149,7 +149,7 @@ const userMenuItems = computed(() => {
   gap: 8px;
   padding: 0 8px 0 14px;
   border-radius: 100px;
-  background: #000000ae;
+  background: #111827 !important;
   backdrop-filter: blur(18px) saturate(180%);
   -webkit-backdrop-filter: blur(18px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.12);

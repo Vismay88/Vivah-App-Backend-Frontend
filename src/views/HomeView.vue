@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="font-family:'emoji'">
     <!-- Hero Section -->
     <section class="relative min-h-[85vh] flex items-center overflow-hidden -mt-[70px] pt-[70px]">
       <!-- Background -->
@@ -39,28 +39,25 @@
             <div class="search-box">
 
               <!-- City Select -->
-              <div class="search-item">
-                <label class="search-label">
-                  <i class="pi pi-map-marker"></i> City
-                </label>
-                <select v-model="searchCity" class="search-select">
-                  <option value="">All Cities</option>
-                  <option v-for="city in gujaratCities" :key="city" :value="city">{{ city }}</option>
-                </select>
-              </div>
+                <VivahDropdown
+      v-model="searchCity"
+      :options="cityOptions"
+      label="City"
+      icon="pi pi-map-marker"
+      placeholder="Any City"
+      :searchable="true"
+    />
 
               <div class="search-divider"></div>
 
               <!-- Category Select -->
-              <div class="search-item">
-                <label class="search-label">
-                  <i class="pi pi-tag"></i> Category
-                </label>
-                <select v-model="searchCategory" class="search-select">
-                  <option value="">All Categories</option>
-                  <option v-for="cat in vendorCategories" :key="cat" :value="cat">{{ cat }}</option>
-                </select>
-              </div>
+              <VivahDropdown
+      v-model="searchCategory"
+      :options="categoryOptions"
+      label="Category"
+      icon="pi pi-tag"
+      placeholder="Any Category"
+    />
 
               <!-- Search Button -->
               <button class="search-btn" @click="handleSearch">
@@ -274,6 +271,7 @@ import { useRouter } from 'vue-router';
 import { useVendorStore } from '@/stores/vendor';
 import VendorCard from '@/components/vendor/VendorCard.vue';
 import { GUJARAT_CITIES, VENDOR_CATEGORIES } from '@/utils/helpers';
+import VivahDropdown from '@/components/ui/Dropdown-Component.vue';
 
 const router = useRouter();
 const vendorStore = useVendorStore();
@@ -286,7 +284,7 @@ const statsData = ref(null);
 
 const gujaratCities = GUJARAT_CITIES;
 const vendorCategories = VENDOR_CATEGORIES;
-
+const cityOptions=gujaratCities.map(c => ({ value: c, label: c }));;
 const heroStats = ref([
   { value: '500+', label: 'Verified Vendors' },
   { value: '20+', label: 'Cities in Gujarat' },
