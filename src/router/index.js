@@ -24,7 +24,7 @@ const routes = [
     path: '/budget',
     name: 'Budget',
     component: () => import('@/views/BudgetView.vue'),
-    meta: { title: 'Wedding Budget Calculator - VivahBazaar' },
+    meta: { title: 'Smart Event Budget Planner - VivahBazaar' },
   },
   {
     path: '/budget/share/:token',

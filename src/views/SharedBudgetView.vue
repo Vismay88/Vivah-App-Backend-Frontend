@@ -11,12 +11,22 @@
         <div class="bg-gradient-to-r from-orange-600 to-rose-600 rounded-2xl p-6 text-white mb-6">
           <div class="flex items-center justify-between flex-wrap gap-3">
             <div>
-              <h1 class="text-2xl font-bold font-display">Wedding Budget Plan</h1>
+              <h1 class="text-2xl font-bold font-display">
+                {{ plan.eventType || 'Wedding' }} Budget Plan
+              </h1>
               <p class="text-orange-100 text-sm mt-1">
                 <span v-if="plan.city">📍 {{ plan.city }}</span>
                 <span v-if="plan.weddingDate"> · 📅 {{ formatDate(plan.weddingDate) }}</span>
                 <span v-if="plan.guestCount"> · 👥 {{ plan.guestCount }} guests</span>
               </p>
+              <div v-if="plan.priorities?.length" class="flex flex-wrap gap-1 mt-2">
+                <span class="text-xs text-orange-200">Priorities:</span>
+                <span
+                  v-for="p in plan.priorities"
+                  :key="p"
+                  class="text-xs bg-white/20 px-2 py-0.5 rounded-full"
+                >{{ p }}</span>
+              </div>
             </div>
             <div class="text-right">
               <p class="text-orange-200 text-sm">Total Budget</p>
@@ -46,7 +56,7 @@
         <!-- Actions -->
         <div class="flex gap-3 flex-wrap">
           <RouterLink to="/budget">
-            <Button label="Create My Own Budget" icon="pi pi-calculator" class="!bg-orange-600 !border-orange-600" />
+            <Button label="Plan My Own Event" icon="pi pi-bolt" class="!bg-orange-600 !border-orange-600" />
           </RouterLink>
           <RouterLink to="/vendors">
             <Button label="Find Vendors" icon="pi pi-search" outlined class="!border-orange-300 !text-orange-600" />
