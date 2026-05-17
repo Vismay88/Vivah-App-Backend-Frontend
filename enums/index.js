@@ -2,6 +2,18 @@
 
 const USER_ROLES = ['couple', 'vendor', 'admin'];
 
+const EVENT_TYPES = [
+  'Wedding',
+  'Engagement',
+  'Reception',
+  'Birthday',
+  'Anniversary',
+  'Baby Shower',
+  'Corporate Event',
+  'Festival Celebration',
+  'Other',
+];
+
 const VENDOR_CATEGORIES = [
   'Photography',
   'Videography',
@@ -67,6 +79,7 @@ const INDIAN_PHONE_REGEX = /^(\+91[\-\s]?)?[6-9]\d{9}$/;
 
 module.exports = {
   USER_ROLES,
+  EVENT_TYPES,
   VENDOR_CATEGORIES,
   BUDGET_CATEGORIES,
   GUJARAT_CITIES,

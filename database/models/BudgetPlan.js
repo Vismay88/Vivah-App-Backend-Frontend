@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { BUDGET_CATEGORIES } = require('../../enums');
+const { BUDGET_CATEGORIES, EVENT_TYPES } = require('../../enums');
 
 const budgetCategorySchema = new mongoose.Schema({
   category: {
@@ -25,6 +25,11 @@ const budgetPlanSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
+    eventType: {
+      type: String,
+      enum: EVENT_TYPES,
+      default: 'Wedding',
+    },
     totalBudget: {
       type: Number,
       required: [true, 'Total budget is required'],
@@ -33,6 +38,7 @@ const budgetPlanSchema = new mongoose.Schema(
     weddingDate: { type: Date },
     guestCount: { type: Number },
     city: { type: String },
+    priorities: [{ type: String }],
     categories: [budgetCategorySchema],
     notes: { type: String },
     isPublic: { type: Boolean, default: false },
