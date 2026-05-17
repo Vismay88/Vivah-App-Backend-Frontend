@@ -125,9 +125,49 @@ export const getRelativeTime = (date) => {
 
 // Gujarat cities list — must match backend Vendor.js city enum exactly
 export const GUJARAT_CITIES = [
-  'Himatnagar',
-  'Jamnagar',
+  'Ahmedabad',
+  'Surat',
   'Vadodara',
+  'Rajkot',
+  'Gandhinagar',
+  'Bhavnagar',
+  'Jamnagar',
+  'Junagadh',
+  'Anand',
+  'Nadiad',
+  'Mehsana',
+  'Morbi',
+  'Surendranagar',
+  'Bharuch',
+  'Navsari',
+  'Valsad',
+  'Porbandar',
+  'Amreli',
+  'Botad',
+  'Dwarka',
+  'Himatnagar',
+  'Palanpur',
+  'Godhra',
+  'Dahod',
+  'Veraval',
+  'Gondal',
+  'Jetpur',
+  'Wankaner',
+  'Ankleshwar',
+  'Vapi',
+];
+
+// Event types — must match backend enums/index.js EVENT_TYPES exactly
+export const EVENT_TYPES = [
+  'Wedding',
+  'Engagement',
+  'Reception',
+  'Birthday',
+  'Anniversary',
+  'Baby Shower',
+  'Corporate Event',
+  'Festival Celebration',
+  'Other',
 ];
 
 // Vendor categories — must match backend Vendor.js category enum exactly

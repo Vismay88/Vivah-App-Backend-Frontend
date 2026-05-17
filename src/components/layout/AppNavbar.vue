@@ -37,12 +37,47 @@
         </template>
 
         <template v-else>
-          <button class="user-pill" @click="toggleUserMenu">
-            <div class="user-avatar">{{ authStore.user?.name?.charAt(0)?.toUpperCase() }}</div>
-            <span class="hidden sm:block user-name">{{ authStore.user?.name?.split(' ')[0] }}</span>
-            <i class="pi pi-chevron-down" style="font-size:10px;opacity:0.6"></i>
-          </button>
-          <Menu ref="userMenu" :model="userMenuItems" :popup="true" />
+          <div class="user-menu-wrap" ref="userMenuWrap">
+            <button class="user-pill" @click="userMenuOpen = !userMenuOpen" :aria-expanded="userMenuOpen">
+              <div class="user-avatar">{{ authStore.user?.name?.charAt(0)?.toUpperCase() }}</div>
+              <span class="hidden sm:block user-name">{{ authStore.user?.name?.split(' ')[0] }}</span>
+              <i class="pi pi-chevron-down user-chevron" :class="{ 'user-chevron--up': userMenuOpen }" />
+            </button>
+
+            <Transition name="umenu">
+              <div v-if="userMenuOpen" class="user-dropdown">
+                <!-- User info header -->
+                <div class="udrop-header">
+                  <div class="udrop-avatar">{{ authStore.user?.name?.charAt(0)?.toUpperCase() }}</div>
+                  <div class="udrop-info">
+                    <div class="udrop-name">{{ authStore.user?.name }}</div>
+                    <div class="udrop-role">{{ authStore.isVendor ? '🏪 Vendor' : authStore.isAdmin ? '⚙️ Admin' : '💑 Couple' }}</div>
+                  </div>
+                </div>
+                <div class="udrop-sep" />
+                <button class="udrop-item" @click="navigate('/dashboard')">
+                  <span class="udrop-item__icon">📊</span>
+                  <span class="udrop-item__label">Dashboard</span>
+                  <i class="pi pi-arrow-right udrop-item__arrow" />
+                </button>
+                <button v-if="authStore.isVendor" class="udrop-item" @click="navigate('/vendor/edit')">
+                  <span class="udrop-item__icon">✏️</span>
+                  <span class="udrop-item__label">Edit Profile</span>
+                  <i class="pi pi-arrow-right udrop-item__arrow" />
+                </button>
+                <button class="udrop-item" @click="navigate('/budget')">
+                  <span class="udrop-item__icon">💰</span>
+                  <span class="udrop-item__label">Budget Planner</span>
+                  <i class="pi pi-arrow-right udrop-item__arrow" />
+                </button>
+                <div class="udrop-sep" />
+                <button class="udrop-item udrop-item--danger" @click="handleLogout">
+                  <span class="udrop-item__icon">🚪</span>
+                  <span class="udrop-item__label">Sign Out</span>
+                </button>
+              </div>
+            </Transition>
+          </div>
         </template>
 
         <!-- Hamburger -->
@@ -92,9 +127,10 @@ import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
-const mobileOpen = ref(false);
-const userMenu = ref(null);
-const isScrolled = ref(false);
+const mobileOpen   = ref(false);
+const userMenuOpen = ref(false);
+const userMenuWrap = ref(null);
+const isScrolled   = ref(false);
 
 const navLinks = [
   { to: '/',        label: 'Home',           icon: 'pi pi-home' },
@@ -105,25 +141,32 @@ const navLinks = [
 const isActive = (path) =>
   path === '/' ? route.path === '/' : route.path.startsWith(path);
 
-const toggleUserMenu = (e) => userMenu.value.toggle(e);
+const navigate = (path) => {
+  userMenuOpen.value = false;
+  mobileOpen.value = false;
+  router.push(path);
+};
+
+const handleLogout = () => {
+  userMenuOpen.value = false;
+  authStore.logout();
+  router.push('/');
+};
+
+const handleOutside = (e) => {
+  if (userMenuWrap.value && !userMenuWrap.value.contains(e.target)) {
+    userMenuOpen.value = false;
+  }
+};
 
 const handleScroll = () => { isScrolled.value = window.scrollY > 20; };
-onMounted(() => window.addEventListener('scroll', handleScroll));
-onUnmounted(() => window.removeEventListener('scroll', handleScroll));
-
-const userMenuItems = computed(() => {
-  const base = [
-    { label: authStore.user?.name, items: [
-      { label: 'Dashboard', icon: 'pi pi-th-large', command: () => router.push('/dashboard') },
-    ]},
-  ];
-  if (authStore.isVendor)
-    base[0].items.push({ label: 'Edit Profile', icon: 'pi pi-pencil', command: () => router.push('/vendor/edit') });
-  base[0].items.push(
-    { separator: true },
-    { label: 'Logout', icon: 'pi pi-sign-out', command: () => { authStore.logout(); router.push('/'); } }
-  );
-  return base;
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+  document.addEventListener('click', handleOutside, true);
+});
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+  document.removeEventListener('click', handleOutside, true);
 });
 </script>
 
@@ -318,11 +361,14 @@ const userMenuItems = computed(() => {
 }
 
 /* User pill */
+.user-menu-wrap {
+  position: relative;
+}
 .user-pill {
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 4px 12px 4px 4px;
+  padding: 4px 10px 4px 4px;
   border-radius: 100px;
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.18);
@@ -355,6 +401,102 @@ const userMenuItems = computed(() => {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.user-chevron {
+  font-size: 10px;
+  opacity: 0.6;
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.user-chevron--up {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+/* ── User dropdown ── */
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 240px;
+  background: #1a1008;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 4px 16px rgba(232,101,10,0.15);
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.udrop-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 16px 14px;
+}
+.udrop-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f97316, #e11d48);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(249,115,22,0.4);
+}
+.udrop-info { min-width: 0; }
+.udrop-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.udrop-role {
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.45);
+  margin-top: 2px;
+}
+
+.udrop-sep {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 2px 0;
+}
+
+.udrop-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.udrop-item:hover {
+  background: rgba(255,255,255,0.07);
+}
+.udrop-item__icon { font-size: 16px; flex-shrink: 0; width: 22px; text-align: center; }
+.udrop-item__label { flex: 1; font-size: 13.5px; font-weight: 500; color: rgba(255,255,255,0.8); }
+.udrop-item:hover .udrop-item__label { color: #fff; }
+.udrop-item__arrow { font-size: 10px; color: rgba(255,255,255,0.2); transition: transform 0.2s, color 0.2s; }
+.udrop-item:hover .udrop-item__arrow { color: rgba(255,255,255,0.5); transform: translateX(2px); }
+
+.udrop-item--danger:hover { background: rgba(239,68,68,0.12); }
+.udrop-item--danger .udrop-item__label { color: rgba(255,100,100,0.85); }
+.udrop-item--danger:hover .udrop-item__label { color: #ff6b6b; }
+
+/* ── Dropdown transition ── */
+.umenu-enter-active { transition: all 0.22s cubic-bezier(0.34,1.56,0.64,1); }
+.umenu-leave-active { transition: all 0.15s ease; }
+.umenu-enter-from   { opacity: 0; transform: translateY(-8px) scale(0.96); }
+.umenu-leave-to     { opacity: 0; transform: translateY(-4px) scale(0.98); }
 
 /* Hamburger — animated bars */
 .hamburger {

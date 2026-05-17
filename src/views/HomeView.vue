@@ -172,15 +172,15 @@
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div class="text-5xl mb-6">💰</div>
         <h2 class="text-3xl font-bold text-white font-display mb-4">
-          Plan Your Wedding Budget
+          Smart Event Budget Planner
         </h2>
         <p class="text-orange-100 text-lg mb-8 max-w-xl mx-auto">
-          Use our smart budget calculator to allocate your wedding budget across all categories and find vendors within your range.
+          Wedding, birthday, anniversary or any special event — tell us your priorities and we'll allocate your budget smartly with vendor recommendations for each category.
         </p>
         <RouterLink to="/budget">
           <Button
-            label="Calculate My Budget"
-            icon="pi pi-calculator"
+            label="Plan My Event Budget"
+            icon="pi pi-bolt"
             size="large"
             class="!bg-white !text-orange-600 !border-white hover:!bg-orange-50 !font-semibold"
           />
